@@ -1,7 +1,7 @@
 #include "protheus.ch"
 
 /*/{Protheus.doc} DadosGrid
-Trnasformar os dados da Grid em Json/Array para facilitar o trabalho com as informações
+Transformar os dados da Grid em Json/Array para facilitar o trabalho com as informações
 @type function
 @version 1
 @author Peter Newton
