@@ -1,8 +1,7 @@
-
 #include "protheus.ch"
 
 /*/{Protheus.doc} DadosGrid
-Trnasformar os dados da Grid em Json/Array para facilitar o trabalho com as informa��es
+Trnasformar os dados da Grid em Json/Array para facilitar o trabalho com as informações
 @type function
 @version 1
 @author Peter Newton
@@ -20,12 +19,12 @@ user function DadosGrid()
     Local aCabecalho := Array(3, 3)
     Local aLinha     := array(2, 4)
 
-    // dados fict�cios de 'aHeader'
+    // dados fictícios de 'aHeader'
     aCabecalho[1][2] := "Campo1"
     aCabecalho[2][2] := "Campo2"
     aCabecalho[3][2] := "Campo3"
 
-    // dados fict�cios de 'aCols'
+    // dados fictícios de 'aCols'
     aLinha[1][1]     := "Valor1 1"
     aLinha[1][2]     := "Valor1 2"
     aLinha[1][3]     := "Valor1 3"
@@ -44,13 +43,13 @@ user function DadosGrid()
     // Capturar todos os dados da Grid
     aDados := oDados:GetAll()
 
-    // Quantidade de linhas, retorna o nome de cada �ndice
+    // Quantidade de linhas, retorna o nome de cada índice
     aDadosNm1 := aDados:GetNames()
 
     // Capturar dados da segunda linha
     aItem := oDados:GetLine(2)
 
-    // Quantidade de �ndices
+    // Quantidade de índices
     aItemNm := aItem:GetNames()
 
     for x1 := 1 to len(aItemNm)
@@ -59,7 +58,7 @@ user function DadosGrid()
 
     next x1
 
-    // Resumo da �pera acima, buscando pela linha e nome do campo
+    // Resumo da ópera acima, buscando pela linha e nome do campo
     conout(oDados:GetLineData(2, "Campo3"))
 
     // Guardar valor desejado
