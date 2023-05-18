@@ -8,7 +8,7 @@ Trnasformar os dados da Grid em Json/Array para facilitar o trabalho com as info
 @since 17/05/2023
 /*/
 user function DadosGrid()
-
+    
     Local oDados     := GridAssoc():New()
     Local aDados
     Local x1
