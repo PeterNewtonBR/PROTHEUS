@@ -21,6 +21,25 @@ user function Teste()
     
 return
 ```
+## Dados fictícios para teste
+
+```
+    // dados fictícios de 'aHeader'
+    aCabecalho[1][2] := "Campo1"
+    aCabecalho[2][2] := "Campo2"
+    aCabecalho[3][2] := "Campo3"
+
+    // dados fictícios de 'aCols'
+    aLinha[1][1]     := "Valor1 1"
+    aLinha[1][2]     := "Valor1 2"
+    aLinha[1][3]     := "Valor1 3"
+    aLinha[1][4]     := "Valor1 3"
+
+    aLinha[2][1]     := "Valor2 1"
+    aLinha[2][2]     := "Valor2 2"
+    aLinha[2][3]     := "Valor2 3"
+    aLinha[2][4]     := "Valor2 3"
+```
 ## Funcionalidades
 
 - Ter todos os dados em Json
