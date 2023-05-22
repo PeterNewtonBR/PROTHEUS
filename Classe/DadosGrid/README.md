@@ -24,6 +24,9 @@ return
 ## Dados fictícios para teste
 
 ```
+    Local aCabecalho := Array(3, 3)
+    Local aLinha     := array(2, 4)
+    
     // dados fictícios de 'aHeader'
     aCabecalho[1][2] := "Campo1"
     aCabecalho[2][2] := "Campo2"
