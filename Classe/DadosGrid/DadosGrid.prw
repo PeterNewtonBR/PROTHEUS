@@ -8,9 +8,6 @@ Transformar os dados da Grid em Json/Array para facilitar o trabalho com as info
 @since 17/05/2023
 /*/
 
-user function DadosGrid()
-return
-
 CLASS DadosGrid
 
     DATA oDados
@@ -57,9 +54,21 @@ return ::oDados
 
 METHOD GetLine(nNum) CLASS DadosGrid
 
+    Local aNames := ::oDados:GetNames()
+
+    if (nNum > Len(aNames))
+        return Nil
+    endif
+    
 return ::oDados[cValToChar(nNum)]
 
 METHOD GetLineData(nNum, cCampo) CLASS DadosGrid
+
+    Local aNames := ::oDados:GetNames()
+
+    if (nNum > Len(aNames))
+        return Nil
+    endif
 
 return ::oDados[cValToChar(nNum)][cCampo]
 
