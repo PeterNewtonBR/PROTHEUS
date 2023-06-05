@@ -61,3 +61,6 @@ User Function MTA410(Args)
 
 Return lRet
 ```
+## Tabela e Índice
+![tabela](https://github.com/PeterNewtonBR/PROTHEUS/assets/61658443/19220507-b4dd-459b-8b41-ad9eafdc52e4)
+![indice](https://github.com/PeterNewtonBR/PROTHEUS/assets/61658443/5c36a889-50f0-441b-ac3d-485b1b21dbdb)
