@@ -67,3 +67,7 @@ Campos: ZZA_FILIAL, ZZA_CLIENT, ZZA_PRODUT, ZZA_ALVANU, ZZA_DTEMIS, ZZA_DTVCTO, 
 
 Campos Virtuais: ZZA_CLINM, ZZA_PRODNM, ZZA_CIDADE.
 
+![ZZA tabela](https://github.com/PeterNewtonBR/PROTHEUS/assets/61658443/bcdbc047-1d13-4e85-9fb9-2c8daeee4d0e)
+
+![ZZA indices](https://github.com/PeterNewtonBR/PROTHEUS/assets/61658443/5a5a9d73-0c60-4f74-841f-048099213acd)
+
