@@ -2,6 +2,13 @@
 #include "TbiConn.ch"
 #include "TbiCode.ch"
 
+/*/{Protheus.doc} AlvaraValido
+Verificar se o alvará de um determinado cliente está válido para um produto em determinado período.
+@type function
+@version  1
+@author Peter Newton
+@since 28/06/2023
+/*/
 user function AlvaraValido(cCliente, cProduto, dDataVerif)
 
     local lRetorno := .T.
