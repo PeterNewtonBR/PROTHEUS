@@ -3,7 +3,8 @@
 
 Jogo de Xadrez criado em ADVPL para praticar os estudos com a linguagem.
 
-![Captura de tela 2023-07-19 181429](https://github.com/PeterNewtonBR/PROTHEUS/assets/61658443/9585e40f-c956-492c-a8d6-3dc6beffca28)
+![Captura de tela 2023-07-19 181429](https://github.com/PeterNewtonBR/PROTHEUS/assets/61658443/2048e92a-8b22-4621-9129-c25208f58c2a)
+
  
 ## Regras do Jogo
 As principais regras foram aplicadas, como movimentos, capturas e xeque-mate.
