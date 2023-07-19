@@ -240,10 +240,10 @@ Static Function GetPositions()
 Return aPosIniPec
 
 /*/{Protheus.doc} SetPosition
-@Description 
-@Type		 
-@Author 	 
-@Since  	 08/07/2023
+Configurar em tela cada posição repassada do GetPositions()
+@type function
+@author Peter Newton
+@since 08/07/2023
 /*/
 Static Function SetPosition()
     
@@ -270,11 +270,8 @@ Return
 /*/{Protheus.doc} SetCapturas
 Colocar a imagem pequena de cada peça já capturada
 @type function
-@version  
 @author Peter Newton
 @since 08/07/2023
-@param Args, array, param_description
-@return variant, return_description
 /*/
 Static Function SetCapturas(cCasa)
     
@@ -319,9 +316,9 @@ Static Function SetCapturas(cCasa)
 Return
 
 /*/{Protheus.doc} ClickCasa
-@Description 
-@Type		 
-@Author 	 
+Cada click em uma casa, decidirá alguma ação baseado em sua ocupação
+@Type		 function
+@Author 	 Peter Newton
 @Since  	 03/07/2023
 /*/
 Static Function ClickCasa(cNomeCasa)
@@ -430,9 +427,9 @@ Static Function ClickCasa(cNomeCasa)
 Return 
 
 /*/{Protheus.doc} SetImgCoor
-@Description 
-@Type		 
-@Author 	 
+Colocar imagem na coordenada informada 
+@Type		 function
+@Author 	 Peter Newton
 @Since  	 07/07/2023
 /*/
 Static Function SetImgCoor(cNomeObj, aPos, aTam, cSrcImg)
@@ -442,9 +439,9 @@ Static Function SetImgCoor(cNomeObj, aPos, aTam, cSrcImg)
 Return
 
 /*/{Protheus.doc} SetBorda
-@Description 
-@Type		 
-@Author 	 
+Colocar a borda de seleção que pode ser azul, verde ou vermelha
+@Type		 function
+@Author 	 Peter Newton 
 @Since  	 07/07/2023
 /*/
 Static Function SetBorda(cCasa, cCor)
@@ -465,9 +462,9 @@ Static Function SetBorda(cCasa, cCor)
 Return
 
 /*/{Protheus.doc} ClearObjs
-@Description 
-@Type		 
-@Author 	 
+limpeza das variáveis
+@Type		 function
+@Author 	 Peter Newton	 
 @Since  	 05/07/2023
 /*/
 Static Function ClearObjs()
@@ -488,32 +485,10 @@ Static Function ClearObjs()
 
 Return
 
-/*/{Protheus.doc} SetBrdGreen
-@Description 
-@Type		 
-@Author 	 
-@Since  	 10/07/2023
-/*/
-Static Function SetBrdGreen(cVerCasa)
-    
-    Local cVerNomePeca := GetPecaCasa(cVerCasa)
-
-    // se estiver vazio, coloca uma borda verde
-    if cVerNomePeca == "vazio"
-        aTmp = GetCasaPos(cVerCasa)
-
-        if aTmp != NIL
-            aadd(aPodeMover, cVerCasa)
-            SetBorda(cVerCasa, 'Green')
-        endif
-    endif
-    
-Return
-
 /*/{Protheus.doc} SetBrdBlue
-@Description 
-@Type		 
-@Author 	 
+Colocar borda azul
+@Type		 function
+@Author 	 Peter Newton 	 
 @Since  	 10/07/2023
 /*/
 Static Function SetBrdBlue(cVerCasa)
@@ -535,13 +510,8 @@ Return
 
 /*/{Protheus.doc} SetbrdMov
 Verifica se coloca a borda vermelha nas peças do oponente
-@type function
-@version  
-@author Peter Newton
-@since 09/07/2023
-@param cCor, character, param_description
-@param cVerCasa, character, param_description
-@return variant, return_description
+@Type		 function
+@Author 	 Peter Newton
 /*/
 Static Function SetBrdRed(cCor, cVerCasa)
     
@@ -562,12 +532,8 @@ Return
 
 /*/{Protheus.doc} MovPermPeca
 Movimentos permitidos relacionados ao ponto atual, calculando com ponto cartesiano
-@type function
-@version  
-@author Peter Newton
-@since 05/07/2023
-@param cPeca, character, nome da peça ex.: ppeao, btorre
-@param cCasa, character, nome da casa ex.: a1, b3
+@Type		 function
+@Author 	 Peter Newton
 /*/
 Static Function MovPermPeca(cPeca, cCasa)
     
@@ -768,10 +734,10 @@ Static Function MovPermPeca(cPeca, cCasa)
     endcase
 Return
 
-/*/{Protheus.doc} SetTorre
-@Description 
-@Type		 
-@Author 	 
+/*/{Protheus.doc} SetBrds
+Configurar bordas
+@Type		 function
+@Author 	 Peter Newton
 @Since  	 12/07/2023
 /*/
 Static Function SetBrds(cVerCasa, cCor)
@@ -792,9 +758,9 @@ Static Function SetBrds(cVerCasa, cCor)
 Return bContin
 
 /*/{Protheus.doc} SetCasa
-@Description 
-@Type		 
-@Author 	 
+Colocar imagem da peça na casa
+@Type		 function
+@Author 	 Peter Newton	 
 @Since  	 05/07/2023
 /*/
 Static Function SetCasa(casa, peca)
@@ -804,9 +770,9 @@ Static Function SetCasa(casa, peca)
 Return
 
 /*/{Protheus.doc} GetPecaCasa
-@Description 
-@Type		 
-@Author 	 
+Pegar cor e nome da peca da casa informada
+@Type		 function
+@Author 	 Peter Newton
 @Since  	 05/07/2023
 /*/
 Static Function GetPecaCasa(cCasa)
@@ -825,12 +791,8 @@ Return cRet
 
 /*/{Protheus.doc} GetCasaPos
 Pegar posição da casa especificada
-@type function
-@version  
-@author Peter Newton
-@since 05/07/2023
-@param cCasa, character, nome da casa ex.: a1, b3
-@return array com as posições em x, y
+@Type		 function
+@Author 	 Peter Newton
 /*/
 Static Function GetCasaPos(cCasa)
     
@@ -845,19 +807,9 @@ Static Function GetCasaPos(cCasa)
     
 Return aRet
 
-Static Function Tempo()
- 
-//   nTempo := nLimite - nStop
- 
-//   oSay4:Refresh()
- 
-//   nStop++
- 
-Return
-
 /*/{Protheus.doc} Fechar
-@Description Pergunta se deseja fechar o jogo
-@Type		 
+Pergunta se deseja fechar o jogo
+@Type		 function
 @Author 	 Peter Newton
 @Since  	 01/07/2023
 /*/
