@@ -11,7 +11,7 @@ As principais regras foram aplicadas, como movimentos, capturas e xeque-mate.
 Faltam algumas regras como não deixar o Rei em xeque, trocar peão ao chegar no final do tabuleiro, empate ao encurralar o rei, passant, etc, o projeto está livre para modificações.
  
  
-## Funcionamento das Posicções
+## Funcionamento das Posições
 O Plano Cartesiano é utilizado para a posição de cada imagem, cada imagem aqui é compreendido o tabuleiro, peça e bordas.
 A imagem do tabuleiro possui o tamanho fixado para que as coordenadas sejam adequadas para as casas, utilizando a matemática básica para definição de tamanho de cada casa e distribuição das peças.
    
