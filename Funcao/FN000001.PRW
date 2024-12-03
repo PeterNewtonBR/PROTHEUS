@@ -14,9 +14,11 @@ Indicaçao de uso no ponto de entrada MNTA420P:
 User Function FN000001
 
     Local aArea    := FWGetArea()
+    //Local aAreaSC7	:= SC7->(GetArea())
     Local cOrdem := "000001"
     Local nAtual := 0
     Local aComprar := {} // array para os itens da compra automática
+    Local aAlterar := {} // array para os itens da compra automática que precisa ser alterados
     Local nQtdeBuy := 0
     Local cDoc := ""
     Local aCabec := {}
@@ -54,7 +56,12 @@ User Function FN000001
         SELECT
             PRODUTO,
             SUM(QTDE_EST) QTDE_EST,
-            SUM(QTDE_SERV) QTDE_SERV
+            SUM(QTDE_SERV) QTDE_SERV,
+            SUM(QTDE_SERV) - SC7.C7_QUANT AS QTDE_DIF, 
+            CASE WHEN SC7.C7_NUM IS NULL THEN 1 ELSE 0 END AS CADCOMPRA // cadastra a compra?
+            , SC7.C7_NUM, SC7.C7_ITEM, SC7.C7_PRECO
+            , SC7.C7_FORNECE, SC7.C7_LOJA, SC7.C7_FILENT
+            , SC7.C7_EMISSAO, SC7.C7_COND, SC7.C7_CONTATO, SC7.R_E_C_N_O_
         FROM
             (
                 /* QUERY PARA INSUMOS VINCULADOS À OS*/
@@ -80,7 +87,7 @@ User Function FN000001
                     AND STF.%NotDel%
                     AND STL.%NotDel%
                     AND SB1.%NotDel%
-                UNION
+                UNION ALL
                 /* QUERY PARA INSUMOS VINCULADOS AO SERVICO*/
                 SELECT
                     STG.TG_CODIGO PRODUTO,
@@ -106,19 +113,12 @@ User Function FN000001
                     AND STG.%NotDel%
                     AND SB1.%NotDel%
             ) AS INSUMOS
-        WHERE
-            NOT EXISTS (
-                SELECT
-                    R_E_C_N_O_
-                FROM
-                    %Table:SC7% SC7
-                WHERE
-                    SC7.C7_CONTATO = %exp:'ATOSCR'+trim(cOrdem)%
-                    AND SC7.C7_PRODUTO = INSUMOS.PRODUTO
-                    AND SC7.%NotDel%
-            )
-        GROUP BY
-            PRODUTO
+            LEFT JOIN %Table:SC7% SC7 ON SC7.C7_CONTATO = %exp:'ATOSCR'+trim(cOrdem)%
+                AND SC7.C7_PRODUTO = INSUMOS.PRODUTO
+                AND SC7.%NotDel%
+            GROUP BY PRODUTO, SC7.C7_QUANT, SC7.C7_NUM, SC7.C7_ITEM, SC7.C7_PRECO, 
+            SC7.C7_FORNECE, SC7.C7_LOJA, SC7.C7_FILENT, 
+            SC7.C7_EMISSAO, SC7.C7_COND, SC7.C7_CONTATO, SC7.R_E_C_N_O_
     EndSql
 
     aDados := GetLastQuery()
@@ -132,12 +132,29 @@ User Function FN000001
         nAtual++        
 
         // se a quantidade de insumos necessários for maior que a quantidade em estoque, deverá comprar
-        If QRY_INSUMO->QTDE_SERV > 0 .AND. QRY_INSUMO->QTDE_SERV > QRY_INSUMO->QTDE_EST
+        If QRY_INSUMO->CADCOMPRA == 1 && QRY_INSUMO->QTDE_SERV > 0 .AND. QRY_INSUMO->QTDE_SERV > QRY_INSUMO->QTDE_EST
             
             nQtdeBuy = QRY_INSUMO->QTDE_SERV - iIf(QRY_INSUMO->QTDE_EST < 0, 0, QRY_INSUMO->QTDE_EST)
 
             aadd(aComprar, {QRY_INSUMO->PRODUTO, nQtdeBuy})
             ConOut(QRY_INSUMO->PRODUTO)
+
+        ElseIf QRY_INSUMO->QTDE_DIF <> 0 // alterar quantidade que já foi feito o pedido
+
+            aadd(aAlterar, {;
+                QRY_INSUMO->PRODUTO,;
+                QRY_INSUMO->QTDE_SERV,; 
+                QRY_INSUMO->C7_NUM,; 
+                QRY_INSUMO->C7_ITEM,; 
+                QRY_INSUMO->C7_PRECO,; 
+                QRY_INSUMO->C7_FORNECE,; 
+                QRY_INSUMO->C7_LOJA,; 
+                QRY_INSUMO->C7_FILENT,;
+                QRY_INSUMO->C7_EMISSAO,;
+                QRY_INSUMO->C7_COND,;
+                QRY_INSUMO->C7_CONTATO,;
+                QRY_INSUMO->R_E_C_N_O_;
+            })
 
         EndIf
 
@@ -147,7 +164,45 @@ User Function FN000001
     QRY_INSUMO->(DbCloseArea())
     
     // se houver algo pra ser comprado, será feito o pedido de compra
-    If len(aComprar) > 0
+    If len(aAlterar) > 0
+    
+        nOpc := 4
+        cDoc := aAlterar[1][3] // código do pedido QRY_INSUMO->C7_NUM
+
+        aadd(aCabec,{"C7_NUM" ,cDoc})
+        aadd(aCabec,{"C7_FORNECE" ,aAlterar[1][6]})
+        aadd(aCabec,{"C7_LOJA" ,aAlterar[1][7]})
+        aadd(aCabec,{"C7_COND" ,aAlterar[1][10]})
+        aadd(aCabec,{"C7_CONTATO" ,aAlterar[1][11]})
+        aadd(aCabec,{"C7_FILENT" ,aAlterar[1][8]})
+
+        For nX := 1 To len(aAlterar)
+            aLinha := {}
+
+            // Alterar item existente
+            aadd(aLinha,{"C7_ITEM" ,aAlterar[nX][4],Nil})
+            aadd(aLinha,{"C7_REC_WT" ,aAlterar[nX][12],Nil})
+            aadd(aLinha,{"C7_PRODUTO" ,aAlterar[nX][1],Nil})
+            aadd(aLinha,{"C7_QUANT" ,aAlterar[nX][2],Nil})
+            aadd(aLinha,{"C7_PRECO" ,aAlterar[nX][5],Nil})
+            aadd(aLinha,{"C7_TOTAL" ,aAlterar[nX][2] * aAlterar[nX][5],Nil})
+            aAdd(aLinha,{"LINPOS","C7_ITEM" ,aAlterar[nX][4]})
+            aAdd(aLinha,{"AUTDELETA","N" ,Nil})
+            aadd(aItens,aLinha)
+
+        Next nX
+
+        lMsErroAuto := .F.
+        MSExecAuto({|a,b,c,d| MATA120(a,b,c,d)},1,aCabec,aItens,nOpc)
+        
+        If !lMsErroAuto
+            ConOut("Alterado PC: "+cDoc)
+        Else
+            ConOut("Erro na alteração!")
+            MostraErro()
+        EndIf
+        
+    ElseIf len(aComprar) > 0
 
         MsgInfo("Alguns itens estão sem estoque e será feito um pedido de compra " + ;
             "automaticamente para a quantidade necessária.")
@@ -218,8 +273,8 @@ User Function FN000001
                     
                 EndSql
 
-                // aDados := GetLastQuery()
-                // conout(aDados[2])
+                aDados := GetLastQuery()
+                conout(aDados[2])
 
                 If QRY_PRECO->PRECO <= 0
 
@@ -242,8 +297,6 @@ User Function FN000001
 
             MsgInfo("Será inserido!")
 
-            return .F.
-
             nOpc        := 3
             lMsErroAuto := .F.
             MSExecAuto({|u,v,x,y| MATA120(u,v,x,y)},1,aCabec,aItens,nOpc)
@@ -260,3 +313,23 @@ User Function FN000001
     ConOut("|=|=|=|=|=|=|=|=|=|=|=|=|=|= END U_FN000001 =|=|=|=|=|=|=|=|=|=|=|=|=|=|=|=|=|")
 
 return .F.
+
+
+Static Function AlteraPC(nRecno,nOpc)
+    Local aArea		:= GetArea()
+    Local aAreaSC7	:= SC7->(GetArea())
+    dbSelectArea("SC7")
+    MsGoto(nRecno)
+ 
+    //Mata120(ExpN1,ExpA1,ExpA2,ExpN2,ExpA1)
+    /*
+    ExpN1 = 1-Pedido de compras ou 2-Autorizacao de entrega
+    ExpA1 = Array Cabecalho para Rotina Automatica 
+    ExpA2 = Array Itens para Rotina Automatica 
+    ExpN2 = Opcao do aRotina para Rotina Automatica 
+    ExpA1 = Apresenta a Dialog da Rotina em Rotina Automatica (.T. ou .F.)
+    */
+    Mata120(1,/*aCabec*/,/*aItens*/,nOpc,.T.) 
+    RestArea(aAreaSC7) 
+    RestArea(aArea) 
+Return .T.
